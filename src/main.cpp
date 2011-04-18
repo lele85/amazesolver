@@ -16,30 +16,39 @@ using std::list;
 using std::string;
 
 int main(int argc, char** argv) {
-    // Todo USE some sort of option parser library!!!
+
     string maze_path;
     SearchStrategy strategy;
-    if (argc > 2) {
-        maze_path = (string)argv[1];
-        string strategy_str = (string)argv[2];
-        if (strategy_str == "DFS") {
-            strategy = DFS;
-        } else if(strategy_str == "BFS") {
-            strategy = BFS;
-        } else if(strategy_str == "BEFS") {
-            strategy = BEFS;
+    int c;
+    string strategy_str;
+    // Get options
+    while ((c = getopt (argc, argv, "s:")) != -1){
+        switch(c) {
+            case's': {
+                strategy_str = optarg;
+                if (strategy_str == "DFS") {
+                    strategy = DFS;
+                } else if(strategy_str == "BFS") {
+                    strategy = BFS;
+                } else if(strategy_str == "BEFS") {
+                    strategy = BEFS;
+                } else {
+                    cout << strategy_str << " is not a valid strategy." << endl;
+                    return 1;
+                }
+            } break;
         }
-        else {
-            cout << argv[2] << " is not a valid strategy." << endl;
-            return 1;
-        }
-    } else {
-       cout << "Missing path or strategy!" << endl;
-       return 1;
     }
+    // Get filename
+    if (optind < argc){
+        maze_path = (string)argv[optind];
+    } else {
+        cout << "No filename passed" << endl;
+        return 1;
+    }
+
     Maze itaca = Maze("Itaca");
     itaca.LoadFromFile(maze_path);
-    //itaca.PrintMaze();
     static struct timeval startTime;
     static struct timeval stopTime;
     gettimeofday(&startTime, NULL);

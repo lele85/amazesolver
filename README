@@ -17,7 +17,7 @@ Binary will be in bin directory.
 
 To test the program you just have to invoke the binary like this:
     
-    ./maze maze_path strategy
+    ./maze -s strategy maze_path
     
 Where maze_path is the path of the ascii maze and strategy is the search
 strategy to find the goal. There are some test maze in res directory.
@@ -30,7 +30,7 @@ Strategy shoul be one of these:
 For example, if you want to solve the first test maze with BFS
 just enter the bin dir and type:
 
-    ./maze ../res/maze1.txt BFS
+    ./maze -s BFS ../res/maze1.txt
 
 *** CONTACT ME ***
 If you are interested in this little inutility feel free to
