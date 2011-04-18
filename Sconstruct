@@ -1,0 +1,4 @@
+BuildDir('bin', 'src', duplicate=0)
+env = Environment(CC = 'gcc',CCFLAGS = '-O2 -Wall -pedantic')
+#env = Environment(CC = 'gcc',CCFLAGS = '-static -g -pg -Wall', LINKFLAGS=['-pg'])
+env.Program('bin/maze', ['bin/main.cpp', 'bin/maze.cpp'])

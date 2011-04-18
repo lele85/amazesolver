@@ -1,0 +1,12 @@
+#Build direcory
+bin/*
+
+#Qt Creator project files
+maze.config
+maze.creator
+maze.creator.*
+maze.files
+maze.includes
+
+#Scons related
+.sconsign.dblite

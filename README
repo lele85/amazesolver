@@ -1,0 +1,37 @@
+*** BUILD PREREQUISITES ***
+
+- Fairly recent GNU/Linux distribution with gcc compiler
+  (Tested on ubuntu 10.04)
+- Scons Build System http://www.scons.org/
+  (Tested with Scons 1.2.0)
+
+*** BUILD INSTRUCTIONS ***
+
+- Enter the project directory (where Sconstruct file is located)
+- Type scons
+- Profit!
+
+Binary will be located in bin directory.
+
+*** TEST THE PROGRAM ***
+
+To test the program you just have to invoke the binary like this:
+    
+    ./maze maze_path strategy
+    
+Where maze_path is the path of the ascii maze and strategy is the search
+strategy to find the goal. There are some test maze in res directory.
+
+Strategy shoul be one of these:
+  - DFS for depth first search
+  - BFS for breadth first search
+  - BEFS  for best first search
+
+If you want to solve the first test maze with BFS
+ just enter the bin dir and type:
+
+    ./maze ../res/maze1.txt BFS
+
+*** CONTACT ME ***
+If you are interested in some way with this little inutility feel free to
+contact me at emanuele.rampichini@gmail.com
