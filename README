@@ -11,7 +11,7 @@
 - Type scons
 - Profit!
 
-Binary will be located in bin directory.
+Binary will be in bin directory.
 
 *** TEST THE PROGRAM ***
 
@@ -27,11 +27,11 @@ Strategy shoul be one of these:
   - BFS for breadth first search
   - BEFS  for best first search
 
-If you want to solve the first test maze with BFS
- just enter the bin dir and type:
+For example, if you want to solve the first test maze with BFS
+just enter the bin dir and type:
 
     ./maze ../res/maze1.txt BFS
 
 *** CONTACT ME ***
-If you are interested in some way with this little inutility feel free to
+If you are interested in this little inutility feel free to
 contact me at emanuele.rampichini@gmail.com
