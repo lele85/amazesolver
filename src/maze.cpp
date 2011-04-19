@@ -383,3 +383,34 @@ void Maze::ExpandArcs(MazeArc &current_arc, std::vector<MazeArc> &open_arcs, std
         }
     }
 }
+
+void Maze::SetSolution(std::vector<MazeArc> closed_arcs) {
+    if (closed_arcs.size() != 0) {
+        solution_path_lenght_ = 0;
+        MazeArc current_arc = *(closed_arcs.rbegin());
+        while (current_arc.get_parent() != NULL) {
+            if (!(current_arc.get_node()->HasProperty(START) ||current_arc.get_node()->HasProperty(GOAL))){
+                current_arc.get_node()->SetProperty(SOLUTION);
+                /*usleep(30000);
+                for (int i = 0; i!=50; ++i){
+                    cout << endl;
+                }
+                itaca.PrintMaze();
+                */
+                ++solution_path_lenght_;
+            }
+            for (vector<MazeArc>::iterator iter = closed_arcs.begin(); iter != closed_arcs.end(); ++iter){
+                MazeNode* current_parent = current_arc.get_parent();
+                MazeNode* parent_node = iter->get_node();
+                if (current_parent == parent_node) {
+                    current_arc = (*iter);
+                    break;
+                }
+            }
+        }
+    }
+}
+
+int Maze::get_solution_path_lenght(){
+    return solution_path_lenght_;
+}

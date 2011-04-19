@@ -56,6 +56,7 @@ class MazeArc{
 class Maze {
     private:
         std::string name_;
+        unsigned int solution_path_lenght_;
         std::vector<std::vector<MazeNode> > nodes_;
         MazeNode* goal_node_;
         MazeNode* start_node_;
@@ -81,6 +82,8 @@ class Maze {
         MazeNode* get_start_node();
         static bool CompareArcDistance(MazeArc first, MazeArc second);
         std::vector<MazeArc> Solve(SearchStrategy strategy);
+        void SetSolution(std::vector<MazeArc> closed_arcs);
+        int get_solution_path_lenght();
 };
 
 #endif

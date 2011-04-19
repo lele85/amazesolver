@@ -55,34 +55,9 @@ int main(int argc, char** argv) {
     vector<MazeArc> closed_arcs = itaca.Solve(strategy);
     gettimeofday(&stopTime, NULL);
     long ticks = (stopTime.tv_sec - startTime.tv_sec) * 1000 + (stopTime.tv_usec - startTime.tv_usec) / 1000;
-
-    if (closed_arcs.size() != 0) {
-        int path_length = 0;
-        MazeArc current_arc = *(closed_arcs.rbegin());
-        while (current_arc.get_parent() != NULL) {
-            if (!(current_arc.get_node()->HasProperty(START) ||current_arc.get_node()->HasProperty(GOAL))){
-                current_arc.get_node()->SetProperty(SOLUTION);
-                /*usleep(30000);
-                for (int i = 0; i!=50; ++i){
-                    cout << endl;
-                }
-                itaca.PrintMaze();
-                ++path_length;
-                */
-                ++path_length;
-            }
-            for (vector<MazeArc>::iterator iter = closed_arcs.begin(); iter != closed_arcs.end(); ++iter){
-                MazeNode* current_parent = current_arc.get_parent();
-                MazeNode* parent_node = iter->get_node();
-                if (current_parent == parent_node) {
-                    current_arc = (*iter);
-                    break;
-                }
-            }
-        }
-        itaca.PrintMaze();
-        cout << "Time to solve: " << ticks << "ms"<< endl ;
-        cout << "Path lenght: " << path_length << endl;
-    }
+    itaca.SetSolution(closed_arcs);
+    itaca.PrintMaze();
+    cout << "Time to solve: " << ticks << "ms"<< endl ;
+    cout << "Path lenght: " << itaca.get_solution_path_lenght() << endl;
     return 0;
 }
