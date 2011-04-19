@@ -24,7 +24,7 @@ class MazeNode{
     public:
         MazeNode();
         MazeNode(int x, int y);
-        MazeNode(int x, int y, std::vector<MazeNodeProperty> properties);
+        MazeNode(int x, int y,const std::vector<MazeNodeProperty>& properties);
         MazeNode(int x, int y, MazeNodeProperty property);
         int getX() const;
         int getY() const;
@@ -59,16 +59,16 @@ class MazeArc{
 class Maze {
     public:
         Maze();
-        Maze(std::string name);
-        void LoadFromFile(std::string path);
-        void PrintMaze();
-        void setName(std::string name);
+        Maze(const std::string& name);
+        void LoadFromFile(const std::string& path);
+        void PrintMaze() const;
+        void setName(const std::string& name);
         std::string getName() const;
         MazeNode* getGoalNode() const;
         MazeNode* getStartNode() const;
-        static bool compareArcDistance(MazeArc first, MazeArc second);
+        static bool compareArcDistance(const MazeArc& first,const MazeArc& second);
         std::vector<MazeArc> solve(SearchStrategy strategy, bool interactive);
-        void setSolution(std::vector<MazeArc> closed_arcs, bool interactive);
+        void setSolution(const std::vector<MazeArc>& closed_arcs, bool interactive);
         int getSolutionSathLenght() const;
 
     private:
@@ -85,8 +85,8 @@ class Maze {
         void popArcDfs(MazeArc& current_arc, std::vector<MazeArc>& open_arcs);
         void popArcBfs(MazeArc& current_arc, std::vector<MazeArc>& open_arcs);
         void popArcsBefs(MazeArc& current_arc, std::vector<MazeArc>& open_arcs);
-        void printAndWaitFor(unsigned int useconds);
-        void expandArcs(MazeArc& current_arc, std::vector<MazeArc>& open_arcs, std::vector<MazeArc>& closed_arcs);
+        void printAndWaitFor(unsigned int useconds) const;
+        void expandArcs(const MazeArc& current_arc, std::vector<MazeArc>& open_arcs, std::vector<MazeArc>& closed_arcs);
 };
 
 #endif

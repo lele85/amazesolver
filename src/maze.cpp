@@ -27,7 +27,7 @@ MazeNode::MazeNode(int x, int y, MazeNodeProperty property){
     properties_.push_back(property);
 }
 
-MazeNode::MazeNode(int x, int y, vector<MazeNodeProperty> properties){
+MazeNode::MazeNode(int x, int y, const vector<MazeNodeProperty>& properties){
     x_ = x;
     y_ = y;
     properties_ = properties;
@@ -97,10 +97,10 @@ MazeNode* MazeArc::getParent() const{
 
 Maze::Maze(){
 }
-Maze::Maze(string name){
+Maze::Maze(const string& name){
     name_ = name;
 }
-void Maze::LoadFromFile(string path){
+void Maze::LoadFromFile(const string& path){
     ifstream infile(path.c_str());
     if (infile) {
         string s;
@@ -145,7 +145,7 @@ void Maze::LoadFromFile(string path){
     initNodesOfInterest();
 }
 
-void Maze::PrintMaze(){
+void Maze::PrintMaze() const{
     const string red_color_start ="\033[1;31m";
     const string red_color_end ="\033[0m";
     const string green_color_start = "\033[1;32m";
@@ -181,7 +181,7 @@ void Maze::PrintMaze(){
     }
 }
 
-void Maze::setName(const std::string name) {
+void Maze::setName(const std::string& name) {
     name_ = name;
 }
 
@@ -336,7 +336,7 @@ vector<MazeArc> Maze::solve(MazeNode* start_node, SearchStrategy strategy, bool 
     return closed_arcs;
 }
 
-bool Maze::compareArcDistance(MazeArc first, MazeArc second) {
+bool Maze::compareArcDistance(const MazeArc& first, const MazeArc& second) {
     return second.getNode()->getGoalDistance() < first.getNode()->getGoalDistance();
 }
 
@@ -356,7 +356,7 @@ void Maze::popArcsBefs(MazeArc& current_arc, vector<MazeArc>& open_arcs){
     open_arcs.erase(open_arcs.end()-1);
 }
 
-void Maze::printAndWaitFor(unsigned int useconds){
+void Maze::printAndWaitFor(unsigned int useconds) const{
     usleep(useconds);
     for (int i = 0; i!=50; ++i){
         cout << endl;
@@ -364,9 +364,9 @@ void Maze::printAndWaitFor(unsigned int useconds){
     PrintMaze();
 }
 
-void Maze::expandArcs(MazeArc &current_arc, std::vector<MazeArc> &open_arcs, std::vector<MazeArc> &closed_arcs){
+void Maze::expandArcs(const MazeArc &current_arc, std::vector<MazeArc> &open_arcs, std::vector<MazeArc> &closed_arcs){
     vector<MazeNode*> surrounding_nodes = getLegalSurroundingAt(current_arc.getNode()->getX(), current_arc.getNode()->getY());
-    for (vector<MazeNode*>::iterator nodes_iter = surrounding_nodes.begin() ; nodes_iter != surrounding_nodes.end(); ++nodes_iter){
+    for (vector<MazeNode*>::iterator nodes_iter = surrounding_nodes.begin(); nodes_iter != surrounding_nodes.end(); ++nodes_iter){
         bool visited = false;
         for (vector<MazeArc>::iterator open_arcs_iter = open_arcs.begin(); open_arcs_iter != open_arcs.end(); ++open_arcs_iter){
             if ((*nodes_iter) == (open_arcs_iter->getNode())){
@@ -385,7 +385,7 @@ void Maze::expandArcs(MazeArc &current_arc, std::vector<MazeArc> &open_arcs, std
     }
 }
 
-void Maze::setSolution(vector<MazeArc> closed_arcs, bool interactive) {
+void Maze::setSolution(const vector<MazeArc>& closed_arcs, bool interactive) {
     if (closed_arcs.size() != 0) {
         solution_path_lenght_ = 0;
         MazeArc current_arc = *(closed_arcs.rbegin());
@@ -395,7 +395,7 @@ void Maze::setSolution(vector<MazeArc> closed_arcs, bool interactive) {
                 if (interactive) printAndWaitFor(40000);
                 ++solution_path_lenght_;
             }
-            for (vector<MazeArc>::iterator iter = closed_arcs.begin(); iter != closed_arcs.end(); ++iter){
+            for (vector<MazeArc>::const_iterator iter = closed_arcs.begin(); iter != closed_arcs.end(); ++iter){
                 MazeNode* current_parent = current_arc.getParent();
                 MazeNode* parent_node = iter->getNode();
                 if (current_parent == parent_node) {
