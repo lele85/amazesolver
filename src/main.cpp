@@ -2,7 +2,6 @@
 #include <vector>
 #include <list>
 #include <string>
-#include "search.h"
 #include "maze.h"
 #include <unistd.h>
 #include <algorithm>
