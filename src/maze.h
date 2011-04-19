@@ -26,15 +26,15 @@ class MazeNode{
         MazeNode(int x, int y);
         MazeNode(int x, int y, std::vector<MazeNodeProperty> properties);
         MazeNode(int x, int y, MazeNodeProperty property);
-        int get_x();
-        int get_y();
-        double get_goal_distance();
-        void set_goal_distance(double distance);
-        void AddProperty(MazeNodeProperty property);
-        bool HasProperty(MazeNodeProperty property);
-        void RemoveProperty(MazeNodeProperty property);
-        void ClearProperties();
-        void SetProperty(MazeNodeProperty property);
+        int getX() const;
+        int getY() const;
+        double getGoalDistance() const;
+        void setGoalDistance(double distance);
+        void addProperty(MazeNodeProperty property);
+        bool hasProperty(MazeNodeProperty property);
+        void removeProperty(MazeNodeProperty property);
+        void clearProperties();
+        void setProperty(MazeNodeProperty property);
 
     private:
         std::vector<MazeNodeProperty> properties_;
@@ -48,8 +48,8 @@ class MazeArc{
     public:
         MazeArc();
         MazeArc(MazeNode* node, MazeNode* parent);
-        MazeNode* get_node();
-        MazeNode* get_parent();
+        MazeNode* getNode() const;
+        MazeNode* getParent() const;
 
     private:
         MazeNode* node_;
@@ -62,14 +62,14 @@ class Maze {
         Maze(std::string name);
         void LoadFromFile(std::string path);
         void PrintMaze();
-        void set_name(std::string name);
-        std::string get_name();
-        MazeNode* get_goal_node();
-        MazeNode* get_start_node();
-        static bool CompareArcDistance(MazeArc first, MazeArc second);
-        std::vector<MazeArc> Solve(SearchStrategy strategy, bool interactive);
-        void SetSolution(std::vector<MazeArc> closed_arcs, bool interactive);
-        int get_solution_path_lenght();
+        void setName(std::string name);
+        std::string getName() const;
+        MazeNode* getGoalNode() const;
+        MazeNode* getStartNode() const;
+        static bool compareArcDistance(MazeArc first, MazeArc second);
+        std::vector<MazeArc> solve(SearchStrategy strategy, bool interactive);
+        void setSolution(std::vector<MazeArc> closed_arcs, bool interactive);
+        int getSolutionSathLenght() const;
 
     private:
         std::string name_;
@@ -77,16 +77,16 @@ class Maze {
         std::vector<std::vector<MazeNode> > nodes_;
         MazeNode* goal_node_;
         MazeNode* start_node_;
-        void InitNodesOfInterest();
-        std::vector<MazeArc> Solve(MazeNode* current_node, SearchStrategy strategy, bool interactive);
-        std::vector<MazeNode*> GetSurroundingAt(int row, int col);
-        std::vector<MazeNode*> GetLegalSurroundingAt(int row, int col);
-        MazeNode* GetNodeAt(unsigned int row,unsigned int col);
-        void PopArcDfs(MazeArc& current_arc, std::vector<MazeArc>& open_arcs);
-        void PopArcBfs(MazeArc& current_arc, std::vector<MazeArc>& open_arcs);
-        void PopArcsBefs(MazeArc& current_arc, std::vector<MazeArc>& open_arcs);
-        void PrintAndWaitFor(unsigned int useconds);
-        void ExpandArcs(MazeArc& current_arc, std::vector<MazeArc>& open_arcs, std::vector<MazeArc>& closed_arcs);
+        void initNodesOfInterest();
+        std::vector<MazeArc> solve(MazeNode* current_node, SearchStrategy strategy, bool interactive);
+        std::vector<MazeNode*> getSurroundingAt(int row, int col);
+        std::vector<MazeNode*> getLegalSurroundingAt(int row, int col);
+        MazeNode* getNodeAt(unsigned int row,unsigned int col);
+        void popArcDfs(MazeArc& current_arc, std::vector<MazeArc>& open_arcs);
+        void popArcBfs(MazeArc& current_arc, std::vector<MazeArc>& open_arcs);
+        void popArcsBefs(MazeArc& current_arc, std::vector<MazeArc>& open_arcs);
+        void printAndWaitFor(unsigned int useconds);
+        void expandArcs(MazeArc& current_arc, std::vector<MazeArc>& open_arcs, std::vector<MazeArc>& closed_arcs);
 };
 
 #endif

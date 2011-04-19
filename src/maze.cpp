@@ -33,23 +33,23 @@ MazeNode::MazeNode(int x, int y, vector<MazeNodeProperty> properties){
     properties_ = properties;
 }
 
-int MazeNode::get_x(){
+int MazeNode::getX() const{
     return x_;
 }
 
-int MazeNode::get_y(){
+int MazeNode::getY() const{
     return y_;
 }
 
-double MazeNode::get_goal_distance(){
+double MazeNode::getGoalDistance() const{
     return goal_distance_;
 }
 
-void MazeNode::set_goal_distance(double distance){
+void MazeNode::setGoalDistance(double distance){
     goal_distance_ = distance;
 }
 
-bool MazeNode::HasProperty(MazeNodeProperty property){
+bool MazeNode::hasProperty(MazeNodeProperty property){
     for (vector<MazeNodeProperty>::const_iterator i = properties_.begin(); i != properties_.end(); ++i){
         if ((*i) == property) {
             return true;
@@ -57,13 +57,13 @@ bool MazeNode::HasProperty(MazeNodeProperty property){
     }
     return false;
 }
-void MazeNode::AddProperty(MazeNodeProperty property){
-    if (!HasProperty(property)){
+void MazeNode::addProperty(MazeNodeProperty property){
+    if (!hasProperty(property)){
         properties_.push_back(property);
     }
 }
 
-void MazeNode::RemoveProperty(MazeNodeProperty property){
+void MazeNode::removeProperty(MazeNodeProperty property){
     for (vector<MazeNodeProperty>::iterator i = properties_.begin(); i != properties_.end(); ++i){
         // No need to care for iterator validity after erase cause we have max 1 property per type
         if ((*i) == property) {
@@ -73,13 +73,13 @@ void MazeNode::RemoveProperty(MazeNodeProperty property){
     }
 }
 
-void MazeNode::ClearProperties(){
+void MazeNode::clearProperties(){
     properties_.clear();
 }
 
-void MazeNode::SetProperty(MazeNodeProperty property) {
-    ClearProperties();
-    AddProperty(property);
+void MazeNode::setProperty(MazeNodeProperty property) {
+    clearProperties();
+    addProperty(property);
 }
 
 MazeArc::MazeArc(MazeNode* node, MazeNode* parent){
@@ -87,11 +87,11 @@ MazeArc::MazeArc(MazeNode* node, MazeNode* parent){
     parent_ = parent;
 }
 
-MazeNode* MazeArc::get_node(){
+MazeNode* MazeArc::getNode() const{
     return node_;
 }
 
-MazeNode* MazeArc::get_parent(){
+MazeNode* MazeArc::getParent() const{
     return parent_;
 }
 
@@ -142,7 +142,7 @@ void Maze::LoadFromFile(string path){
         exit(1);
     }
     // Initialize interesting nodes for direct access
-    InitNodesOfInterest();
+    initNodesOfInterest();
 }
 
 void Maze::PrintMaze(){
@@ -158,22 +158,22 @@ void Maze::PrintMaze(){
     for (vector<vector<MazeNode> >::const_iterator row_iterator = nodes_.begin(); row_iterator != nodes_.end(); ++row_iterator){
         for (vector<MazeNode>::const_iterator col_iterator = row_iterator->begin(); col_iterator != row_iterator->end(); ++col_iterator){
             MazeNode node = (*col_iterator);
-            if (node.HasProperty(WALL)){
+            if (node.hasProperty(WALL)){
                 cout << "#";
             }
-            if (node.HasProperty(START)){
+            if (node.hasProperty(START)){
                 cout << yellow_color_start << "S" << yellow_color_end;
             }
-            if (node.HasProperty(GOAL)){
+            if (node.hasProperty(GOAL)){
                 cout << green_color_start << "G" << green_color_end;
             }
-            if (node.HasProperty(WALKABLE)){
+            if (node.hasProperty(WALKABLE)){
                 cout << " ";
             }
-            if (node.HasProperty(VISITED)){
+            if (node.hasProperty(VISITED)){
                 cout << red_color_start << "*" << red_color_end;
             }
-            if (node.HasProperty(SOLUTION)){
+            if (node.hasProperty(SOLUTION)){
                 cout << blue_color_start << "o" << blue_color_end;
             }
         }
@@ -181,41 +181,41 @@ void Maze::PrintMaze(){
     }
 }
 
-void Maze::set_name(const std::string name) {
+void Maze::setName(const std::string name) {
     name_ = name;
 }
 
-std::string Maze::get_name() {
+std::string Maze::getName() const{
     return name_;
 }
 
-MazeNode* Maze::get_goal_node() {
+MazeNode* Maze::getGoalNode() const{
     return goal_node_;
 }
 
-MazeNode* Maze::get_start_node() {
+MazeNode* Maze::getStartNode() const{
     return start_node_;
 }
 
-MazeNode* Maze::GetNodeAt(unsigned int row, unsigned int col){
+MazeNode* Maze::getNodeAt(unsigned int row, unsigned int col) {
     if ((row < nodes_.size()) && (col < nodes_[row].size())) {
         return &nodes_[row][col];
     }
     return NULL;
 }
 
-vector<MazeNode*> Maze::GetSurroundingAt(int row, int col) {
+vector<MazeNode*> Maze::getSurroundingAt(int row, int col) {
     vector<MazeNode*> surrounding;
     // check if central node exists
-    MazeNode* target = GetNodeAt(row,col);
+    MazeNode* target = getNodeAt(row,col);
     if (target == NULL) {
         return surrounding;
     }
     // fetch surrounding nodes
-    MazeNode* top = GetNodeAt(row-1,col);
-    MazeNode* right = GetNodeAt(row,col+1);
-    MazeNode* bottom = GetNodeAt(row+1,col);
-    MazeNode* left = GetNodeAt(row, col-1);
+    MazeNode* top = getNodeAt(row-1,col);
+    MazeNode* right = getNodeAt(row,col+1);
+    MazeNode* bottom = getNodeAt(row+1,col);
+    MazeNode* left = getNodeAt(row, col-1);
     // check for null pointers and return not null node references
     if (top != NULL) { surrounding.push_back(top); }
     if (right != NULL) { surrounding.push_back(right); }
@@ -224,27 +224,27 @@ vector<MazeNode*> Maze::GetSurroundingAt(int row, int col) {
     return surrounding;
 }
 
-vector<MazeNode*> Maze::GetLegalSurroundingAt(int row, int col) {
-    vector<MazeNode*> surrounding = GetSurroundingAt(row,col);
+vector<MazeNode*> Maze::getLegalSurroundingAt(int row, int col) {
+    vector<MazeNode*> surrounding = getSurroundingAt(row,col);
     vector<MazeNode*> legal_surrounding;
     for (vector<MazeNode*>::const_iterator iter = surrounding.begin(); iter != surrounding.end(); ++iter ){
-        if ((*(*iter)).HasProperty(WALKABLE)) {
+        if ((*(*iter)).hasProperty(WALKABLE)) {
             legal_surrounding.push_back((*iter));
-        } else if ((*(*iter)).HasProperty(GOAL)) {
+        } else if ((*(*iter)).hasProperty(GOAL)) {
             legal_surrounding.push_back((*iter));
         }
     }
     return legal_surrounding;
 }
 
-void Maze::InitNodesOfInterest() {
+void Maze::initNodesOfInterest() {
     //Set start node and goal node
     for (vector<vector<MazeNode> >::iterator row_iterator = nodes_.begin(); row_iterator != nodes_.end(); ++row_iterator){
         for (vector<MazeNode>::iterator col_iterator = row_iterator->begin(); col_iterator != row_iterator->end(); ++col_iterator){
-            if (col_iterator->HasProperty(GOAL)){
+            if (col_iterator->hasProperty(GOAL)){
                 goal_node_ = &(*col_iterator);
             }
-            if (col_iterator->HasProperty(START)){
+            if (col_iterator->hasProperty(START)){
                 start_node_ = &(*col_iterator);
             }
         }
@@ -253,21 +253,21 @@ void Maze::InitNodesOfInterest() {
     for (vector<vector<MazeNode> >::iterator row_iterator = nodes_.begin(); row_iterator != nodes_.end(); ++row_iterator){
         for (vector<MazeNode>::iterator col_iterator = row_iterator->begin(); col_iterator != row_iterator->end(); ++col_iterator){
             int current_x,current_y,goal_x,goal_y;
-            current_x = col_iterator->get_x();
-            current_y = col_iterator->get_y();
-            goal_x = goal_node_->get_x();
-            goal_y = goal_node_->get_y();
+            current_x = col_iterator->getX();
+            current_y = col_iterator->getY();
+            goal_x = goal_node_->getX();
+            goal_y = goal_node_->getY();
             double distance = sqrt(pow((current_x-goal_x),2)+pow((current_y-goal_y),2));
-            col_iterator->set_goal_distance(distance);
+            col_iterator->setGoalDistance(distance);
         }
     }
 }
 
-vector<MazeArc> Maze::Solve(SearchStrategy strategy, bool interactive){
-    return Solve(start_node_, strategy, interactive);
+vector<MazeArc> Maze::solve(SearchStrategy strategy, bool interactive){
+    return solve(start_node_, strategy, interactive);
 }
 
-vector<MazeArc> Maze::Solve(MazeNode* start_node, SearchStrategy strategy, bool interactive){
+vector<MazeArc> Maze::solve(MazeNode* start_node, SearchStrategy strategy, bool interactive){
     vector<MazeArc> closed_arcs;
     switch (strategy){
         case DFS:{
@@ -275,17 +275,17 @@ vector<MazeArc> Maze::Solve(MazeNode* start_node, SearchStrategy strategy, bool 
             MazeArc current_arc = MazeArc(start_node, NULL);
             open_arcs.push_back(current_arc);
             while (open_arcs.size() != 0) {
-                PopArcDfs(current_arc, open_arcs);
+                popArcDfs(current_arc, open_arcs);
                 closed_arcs.push_back(current_arc);
-                if (!(current_arc.get_node()->HasProperty(START) ||current_arc.get_node()->HasProperty(GOAL))){
-                    current_arc.get_node()->SetProperty(VISITED);
+                if (!(current_arc.getNode()->hasProperty(START) ||current_arc.getNode()->hasProperty(GOAL))){
+                    current_arc.getNode()->setProperty(VISITED);
                 }
-                if (interactive) PrintAndWaitFor(40000);
-                if (current_arc.get_node()->HasProperty(GOAL)) {
+                if (interactive) printAndWaitFor(40000);
+                if (current_arc.getNode()->hasProperty(GOAL)) {
                     closed_arcs.push_back(current_arc);
                     return closed_arcs;
                 } else {
-                    ExpandArcs(current_arc, open_arcs, closed_arcs);
+                    expandArcs(current_arc, open_arcs, closed_arcs);
                 }
             }
         } break;
@@ -296,18 +296,18 @@ vector<MazeArc> Maze::Solve(MazeNode* start_node, SearchStrategy strategy, bool 
             MazeArc current_arc = MazeArc(start_node, NULL);
             open_arcs.push_back(current_arc);
             while (open_arcs.size() != 0) {
-                PopArcBfs(current_arc, open_arcs);
+                popArcBfs(current_arc, open_arcs);
                 closed_arcs.push_back(current_arc);
-                if (!(current_arc.get_node()->HasProperty(START) ||current_arc.get_node()->HasProperty(GOAL))){
-                    current_arc.get_node()->SetProperty(VISITED);
+                if (!(current_arc.getNode()->hasProperty(START) ||current_arc.getNode()->hasProperty(GOAL))){
+                    current_arc.getNode()->setProperty(VISITED);
                 }
                 // If in interactive mode print the maze and wait
-                if (interactive) PrintAndWaitFor(40000);
-                if (current_arc.get_node()->HasProperty(GOAL)) {
+                if (interactive) printAndWaitFor(40000);
+                if (current_arc.getNode()->hasProperty(GOAL)) {
                     closed_arcs.push_back(current_arc);
                     return closed_arcs;
                 } else {
-                    ExpandArcs(current_arc, open_arcs, closed_arcs);
+                    expandArcs(current_arc, open_arcs, closed_arcs);
                 }
             }
         };break;
@@ -317,17 +317,17 @@ vector<MazeArc> Maze::Solve(MazeNode* start_node, SearchStrategy strategy, bool 
             MazeArc current_arc = MazeArc(start_node, NULL);
             open_arcs.push_back(current_arc);
             while (open_arcs.size() != 0) {
-                PopArcsBefs(current_arc, open_arcs);
+                popArcsBefs(current_arc, open_arcs);
                 closed_arcs.push_back(current_arc);
-                if (!(current_arc.get_node()->HasProperty(START) ||current_arc.get_node()->HasProperty(GOAL))){
-                    current_arc.get_node()->SetProperty(VISITED);
+                if (!(current_arc.getNode()->hasProperty(START) ||current_arc.getNode()->hasProperty(GOAL))){
+                    current_arc.getNode()->setProperty(VISITED);
                 }
-                if (interactive) PrintAndWaitFor(40000);
-                if (current_arc.get_node()->HasProperty(GOAL)) {
+                if (interactive) printAndWaitFor(40000);
+                if (current_arc.getNode()->hasProperty(GOAL)) {
                     closed_arcs.push_back(current_arc);
                     return closed_arcs;
                 } else {
-                    ExpandArcs(current_arc, open_arcs, closed_arcs);
+                    expandArcs(current_arc, open_arcs, closed_arcs);
                 }
             }
         } break;
@@ -336,27 +336,27 @@ vector<MazeArc> Maze::Solve(MazeNode* start_node, SearchStrategy strategy, bool 
     return closed_arcs;
 }
 
-bool Maze::CompareArcDistance(MazeArc first, MazeArc second) {
-    return second.get_node()->get_goal_distance() < first.get_node()->get_goal_distance();
+bool Maze::compareArcDistance(MazeArc first, MazeArc second) {
+    return second.getNode()->getGoalDistance() < first.getNode()->getGoalDistance();
 }
 
-void Maze::PopArcDfs(MazeArc& current_arc, vector<MazeArc>& open_arcs){
+void Maze::popArcDfs(MazeArc& current_arc, vector<MazeArc>& open_arcs){
     current_arc = (*(open_arcs.end()-1));
     open_arcs.erase(open_arcs.end()-1);
 }
 
-void Maze::PopArcBfs(MazeArc& current_arc, vector<MazeArc>& open_arcs){
+void Maze::popArcBfs(MazeArc& current_arc, vector<MazeArc>& open_arcs){
     current_arc = (*(open_arcs.begin()));
     open_arcs.erase(open_arcs.begin());
 }
 
-void Maze::PopArcsBefs(MazeArc& current_arc, vector<MazeArc>& open_arcs){
-    sort(open_arcs.begin(), open_arcs.end(), Maze::CompareArcDistance);
+void Maze::popArcsBefs(MazeArc& current_arc, vector<MazeArc>& open_arcs){
+    sort(open_arcs.begin(), open_arcs.end(), Maze::compareArcDistance);
     current_arc = (*(open_arcs.end()-1));
     open_arcs.erase(open_arcs.end()-1);
 }
 
-void Maze::PrintAndWaitFor(unsigned int useconds){
+void Maze::printAndWaitFor(unsigned int useconds){
     usleep(useconds);
     for (int i = 0; i!=50; ++i){
         cout << endl;
@@ -364,40 +364,40 @@ void Maze::PrintAndWaitFor(unsigned int useconds){
     PrintMaze();
 }
 
-void Maze::ExpandArcs(MazeArc &current_arc, std::vector<MazeArc> &open_arcs, std::vector<MazeArc> &closed_arcs){
-    vector<MazeNode*> surrounding_nodes = GetLegalSurroundingAt(current_arc.get_node()->get_x(), current_arc.get_node()->get_y());
+void Maze::expandArcs(MazeArc &current_arc, std::vector<MazeArc> &open_arcs, std::vector<MazeArc> &closed_arcs){
+    vector<MazeNode*> surrounding_nodes = getLegalSurroundingAt(current_arc.getNode()->getX(), current_arc.getNode()->getY());
     for (vector<MazeNode*>::iterator nodes_iter = surrounding_nodes.begin() ; nodes_iter != surrounding_nodes.end(); ++nodes_iter){
         bool visited = false;
         for (vector<MazeArc>::iterator open_arcs_iter = open_arcs.begin(); open_arcs_iter != open_arcs.end(); ++open_arcs_iter){
-            if ((*nodes_iter) == (open_arcs_iter->get_node())){
+            if ((*nodes_iter) == (open_arcs_iter->getNode())){
                 visited = true;
             }
         }
         for (vector<MazeArc>::iterator closed_arcs_iter = closed_arcs.begin(); closed_arcs_iter != closed_arcs.end(); ++closed_arcs_iter){
-            if ((*nodes_iter) == (closed_arcs_iter->get_node())){
+            if ((*nodes_iter) == (closed_arcs_iter->getNode())){
                 visited = true;
             }
         }
         if (!visited) {
-            MazeArc arc = MazeArc((*nodes_iter), current_arc.get_node());
+            MazeArc arc = MazeArc((*nodes_iter), current_arc.getNode());
             open_arcs.push_back(arc);
         }
     }
 }
 
-void Maze::SetSolution(vector<MazeArc> closed_arcs, bool interactive) {
+void Maze::setSolution(vector<MazeArc> closed_arcs, bool interactive) {
     if (closed_arcs.size() != 0) {
         solution_path_lenght_ = 0;
         MazeArc current_arc = *(closed_arcs.rbegin());
-        while (current_arc.get_parent() != NULL) {
-            if (!(current_arc.get_node()->HasProperty(START) ||current_arc.get_node()->HasProperty(GOAL))){
-                current_arc.get_node()->SetProperty(SOLUTION);
-                if (interactive) PrintAndWaitFor(40000);
+        while (current_arc.getParent() != NULL) {
+            if (!(current_arc.getNode()->hasProperty(START) ||current_arc.getNode()->hasProperty(GOAL))){
+                current_arc.getNode()->setProperty(SOLUTION);
+                if (interactive) printAndWaitFor(40000);
                 ++solution_path_lenght_;
             }
             for (vector<MazeArc>::iterator iter = closed_arcs.begin(); iter != closed_arcs.end(); ++iter){
-                MazeNode* current_parent = current_arc.get_parent();
-                MazeNode* parent_node = iter->get_node();
+                MazeNode* current_parent = current_arc.getParent();
+                MazeNode* parent_node = iter->getNode();
                 if (current_parent == parent_node) {
                     current_arc = (*iter);
                     break;
@@ -407,6 +407,6 @@ void Maze::SetSolution(vector<MazeArc> closed_arcs, bool interactive) {
     }
 }
 
-int Maze::get_solution_path_lenght(){
+int Maze::getSolutionSathLenght() const{
     return solution_path_lenght_;
 }

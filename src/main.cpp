@@ -56,12 +56,12 @@ int main(int argc, char** argv) {
     static struct timeval startTime;
     static struct timeval stopTime;
     gettimeofday(&startTime, NULL);
-    vector<MazeArc> closed_arcs = itaca.Solve(strategy, interactive);
+    vector<MazeArc> closed_arcs = itaca.solve(strategy, interactive);
     gettimeofday(&stopTime, NULL);
     long ticks = (stopTime.tv_sec - startTime.tv_sec) * 1000 + (stopTime.tv_usec - startTime.tv_usec) / 1000;
-    itaca.SetSolution(closed_arcs, interactive);
+    itaca.setSolution(closed_arcs, interactive);
     itaca.PrintMaze();
     cout << "Time to solve: " << ticks << "ms"<< endl ;
-    cout << "Path lenght: " << itaca.get_solution_path_lenght() << endl;
+    cout << "Path lenght: " << itaca.getSolutionSathLenght() << endl;
     return 0;
 }
