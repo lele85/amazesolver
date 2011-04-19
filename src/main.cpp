@@ -18,11 +18,12 @@ using std::string;
 int main(int argc, char** argv) {
 
     string maze_path;
-    SearchStrategy strategy;
+    SearchStrategy strategy = BFS;
     int c;
     string strategy_str;
+    bool interactive = false;
     // Get options
-    while ((c = getopt (argc, argv, "s:")) != -1){
+    while ((c = getopt (argc, argv, "is:")) != -1){
         switch(c) {
             case's': {
                 strategy_str = optarg;
@@ -35,7 +36,10 @@ int main(int argc, char** argv) {
                 } else {
                     cout << strategy_str << " is not a valid strategy." << endl;
                     return 1;
-                }
+                } break;
+            }
+            case 'i': {
+                    interactive = true;
             } break;
         }
     }
@@ -52,10 +56,10 @@ int main(int argc, char** argv) {
     static struct timeval startTime;
     static struct timeval stopTime;
     gettimeofday(&startTime, NULL);
-    vector<MazeArc> closed_arcs = itaca.Solve(strategy);
+    vector<MazeArc> closed_arcs = itaca.Solve(strategy, interactive);
     gettimeofday(&stopTime, NULL);
     long ticks = (stopTime.tv_sec - startTime.tv_sec) * 1000 + (stopTime.tv_usec - startTime.tv_usec) / 1000;
-    itaca.SetSolution(closed_arcs);
+    itaca.SetSolution(closed_arcs, interactive);
     itaca.PrintMaze();
     cout << "Time to solve: " << ticks << "ms"<< endl ;
     cout << "Path lenght: " << itaca.get_solution_path_lenght() << endl;

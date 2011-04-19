@@ -61,7 +61,7 @@ class Maze {
         MazeNode* goal_node_;
         MazeNode* start_node_;
         void InitNodesOfInterest();
-        std::vector<MazeArc> Solve(MazeNode* current_node, SearchStrategy strategy);
+        std::vector<MazeArc> Solve(MazeNode* current_node, SearchStrategy strategy, bool interactive);
         std::vector<MazeNode*> GetSurroundingAt(int row, int col);
         std::vector<MazeNode*> GetLegalSurroundingAt(int row, int col);
         MazeNode* GetNodeAt(unsigned int row,unsigned int col);
@@ -81,8 +81,8 @@ class Maze {
         MazeNode* get_goal_node();
         MazeNode* get_start_node();
         static bool CompareArcDistance(MazeArc first, MazeArc second);
-        std::vector<MazeArc> Solve(SearchStrategy strategy);
-        void SetSolution(std::vector<MazeArc> closed_arcs);
+        std::vector<MazeArc> Solve(SearchStrategy strategy, bool interactive);
+        void SetSolution(std::vector<MazeArc> closed_arcs, bool interactive);
         int get_solution_path_lenght();
 };
 

@@ -24,13 +24,17 @@ strategy to find the goal. There are some test maze in res directory.
 
 Strategy shoul be one of these:
   - DFS for depth first search
-  - BFS for breadth first search
+  - BFS for breadth first search (default)
   - BEFS  for best first search
 
-For example, if you want to solve the first test maze with BFS
+For example, if you want to solve the first test maze with BEFS
 just enter the bin dir and type:
 
-    ./maze -s BFS ../res/maze1.txt
+    ./maze -s BEFS ../res/maze1.txt
+
+If you want to see node animated exploration append -i:
+
+    ./maze -s BEFS -i ../res/maze1.txt
 
 *** CONTACT ME ***
 If you are interested in this little inutility feel free to
