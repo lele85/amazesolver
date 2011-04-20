@@ -269,6 +269,7 @@ vector<MazeArc> Maze::solve(SearchStrategy strategy, bool interactive){
 
 vector<MazeArc> Maze::solve(MazeNode* start_node, SearchStrategy strategy, bool interactive){
     vector<MazeArc> closed_arcs;
+    const int interactive_mode_wait_time = 40000;
     switch (strategy){
         case DFS:{
             vector<MazeArc> open_arcs;
@@ -280,7 +281,7 @@ vector<MazeArc> Maze::solve(MazeNode* start_node, SearchStrategy strategy, bool 
                 if (!(current_arc.getNode()->hasProperty(START) ||current_arc.getNode()->hasProperty(GOAL))){
                     current_arc.getNode()->setProperty(VISITED);
                 }
-                if (interactive) printAndWaitFor(40000);
+                if (interactive) printAndWaitFor(interactive_mode_wait_time);
                 if (current_arc.getNode()->hasProperty(GOAL)) {
                     closed_arcs.push_back(current_arc);
                     return closed_arcs;
@@ -302,7 +303,7 @@ vector<MazeArc> Maze::solve(MazeNode* start_node, SearchStrategy strategy, bool 
                     current_arc.getNode()->setProperty(VISITED);
                 }
                 // If in interactive mode print the maze and wait
-                if (interactive) printAndWaitFor(40000);
+                if (interactive) printAndWaitFor(interactive_mode_wait_time);
                 if (current_arc.getNode()->hasProperty(GOAL)) {
                     closed_arcs.push_back(current_arc);
                     return closed_arcs;
@@ -322,7 +323,7 @@ vector<MazeArc> Maze::solve(MazeNode* start_node, SearchStrategy strategy, bool 
                 if (!(current_arc.getNode()->hasProperty(START) ||current_arc.getNode()->hasProperty(GOAL))){
                     current_arc.getNode()->setProperty(VISITED);
                 }
-                if (interactive) printAndWaitFor(40000);
+                if (interactive) printAndWaitFor(interactive_mode_wait_time);
                 if (current_arc.getNode()->hasProperty(GOAL)) {
                     closed_arcs.push_back(current_arc);
                     return closed_arcs;
@@ -358,7 +359,8 @@ void Maze::popArcsBefs(MazeArc& current_arc, vector<MazeArc>& open_arcs){
 
 void Maze::printAndWaitFor(unsigned int useconds) const{
     usleep(useconds);
-    for (int i = 0; i!=50; ++i){
+    const int empty_lines_number = 50;
+    for (int i = 0; i!=empty_lines_number; ++i){
         cout << endl;
     }
     PrintMaze();
@@ -386,13 +388,14 @@ void Maze::expandArcs(const MazeArc &current_arc, std::vector<MazeArc> &open_arc
 }
 
 void Maze::setSolution(const vector<MazeArc>& closed_arcs, bool interactive) {
+    const int interactive_mode_wait_time = 40000;
     if (closed_arcs.size() != 0) {
         solution_path_lenght_ = 0;
         MazeArc current_arc = *(closed_arcs.rbegin());
         while (current_arc.getParent() != NULL) {
             if (!(current_arc.getNode()->hasProperty(START) ||current_arc.getNode()->hasProperty(GOAL))){
                 current_arc.getNode()->setProperty(SOLUTION);
-                if (interactive) printAndWaitFor(40000);
+                if (interactive) printAndWaitFor(interactive_mode_wait_time);
                 ++solution_path_lenght_;
             }
             for (vector<MazeArc>::const_iterator iter = closed_arcs.begin(); iter != closed_arcs.end(); ++iter){
